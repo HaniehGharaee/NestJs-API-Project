@@ -7,8 +7,8 @@ import { Connection } from 'mongoose';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
-        const uri = configService.get<string>('mongodb.uri');
-        const dbName = configService.get<string>('mongodb.dbName');
+        const uri = configService.get<string>('MONGODB_URI');
+        const dbName = configService.get<string>('MONGODB_DBNAME');
         const username = configService.get<string>('mongodb.username');
         const password = configService.get<string>('mongodb.password');
 
