@@ -24,5 +24,7 @@ export class UserController {
   @userSwagger('create')
   @Roles('admin')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() createUserDto: createUserDto, @Res() res: Response) {}
+  async create(@Body() createUserDto: createUserDto, @Res() res: Response) {
+    const user = await this.userService.createUser(createUserDto)
+  }
 }
