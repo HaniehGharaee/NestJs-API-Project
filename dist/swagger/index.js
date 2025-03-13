@@ -16,4 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./constants/setup.swagger"), exports);
 __exportStar(require("./auth.swagger"), exports);
+__exportStar(require("./user.swagger"), exports);
 //# sourceMappingURL=index.js.map
