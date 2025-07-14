@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { UserRole } from './roles.enum';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 export type UserDocument = User & Document;
@@ -41,6 +41,9 @@ export class User extends Document {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Prop({ type: Types.ObjectId, ref: 'Pharmacy' })
+  pharmacyId: Types.ObjectId;
 
   @Prop()
   address: string;

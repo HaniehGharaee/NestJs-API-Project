@@ -24,7 +24,30 @@ let UserController = class UserController {
         this.userService = userService;
     }
     async create(createUserDto, res) {
-        const user = await this.userService.createUser(createUserDto);
+        try {
+            const user = await this.userService.createUser(createUserDto);
+            return res.status(common_1.HttpStatus.CREATED).json({
+                success: true,
+                message: "",
+                data: user,
+                status: common_1.HttpStatus.CREATED,
+            });
+        }
+        catch (error) {
+            if (error instanceof common_1.ConflictException) {
+                return res.status(common_1.HttpStatus.CONFLICT).json({
+                    success: false,
+                    message: error.message,
+                    status: common_1.HttpStatus.CONFLICT,
+                });
+            }
+            return res.status(common_1.HttpStatus.INTERNAL_SERVER_ERROR).json({
+                success: false,
+                message: "",
+                error: error.message,
+                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
+            });
+        }
     }
 };
 exports.UserController = UserController;
@@ -36,7 +59,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.createUserDto, Response]),
+    __metadata("design:paramtypes", [create_user_dto_1.createUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "create", null);
 exports.UserController = UserController = __decorate([

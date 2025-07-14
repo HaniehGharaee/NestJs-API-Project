@@ -32,6 +32,14 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "fullName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "email", void 0);
+__decorate([
     (0, mongoose_1.Prop)({
         unique: true,
         length: 10,
@@ -53,6 +61,14 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'Pharmacy' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], User.prototype, "pharmacyId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "address", void 0);
 exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 exports.UserSchema.plugin(mongoosePaginate);
 //# sourceMappingURL=user.schema.js.map

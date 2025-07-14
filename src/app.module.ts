@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 // import { APP_GUARD } from '@nestjs/core';
 // import { RolesGuard } from './modules/rbac/guards/roles.guard';
 import { UserModule } from './modules/user/user.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './modules/user/user.module';
     //UsersModule,
     AuthModule,
     UserModule,
+    DashboardModule,
   ],
   providers: [
     //SmsService,
