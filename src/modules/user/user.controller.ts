@@ -12,7 +12,6 @@ import {
 import { UserService } from './user.service';
 import { Response } from 'express'
 import { ApiTags } from '@nestjs/swagger';
-import { userSwagger } from '../../swagger';
 import { Roles } from './schema/roles.decorator';
 import { createUserDto } from './Dto/create-user.dto';
 
@@ -23,7 +22,6 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Post('create')
-  @userSwagger('create')
   @Roles('admin')
   @UsePipes(new ValidationPipe({ transform: true }))
   async create(@Body() createUserDto: createUserDto, @Res() res: Response) {
