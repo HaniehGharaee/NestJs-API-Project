@@ -16,7 +16,6 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const swagger_1 = require("@nestjs/swagger");
-const swagger_2 = require("../../swagger");
 const roles_decorator_1 = require("./schema/roles.decorator");
 const create_user_dto_1 = require("./Dto/create-user.dto");
 let UserController = class UserController {
@@ -53,7 +52,6 @@ let UserController = class UserController {
 exports.UserController = UserController;
 __decorate([
     (0, common_1.Post)('create'),
-    (0, swagger_2.userSwagger)('create'),
     (0, roles_decorator_1.Roles)('admin'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Body)()),
