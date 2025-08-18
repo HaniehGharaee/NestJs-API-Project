@@ -19,7 +19,7 @@ export class DashboardController {
 
   @Get('summery')
   async getDashboardSummery(@Req() req, @Res() res){
-    const result = await this.dashboardService.getSummery(req.user.id);
+    const result = await this.dashboardService.getSummery(); //req.user.pharmacyId
     return res.status(200).json({ success: true, data: result})
   }
 }

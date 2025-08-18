@@ -20,7 +20,7 @@ let DashboardController = class DashboardController {
         this.dashboardService = dashboardService;
     }
     async getDashboardSummery(req, res) {
-        const result = await this.dashboardService.getSummery(req.user.id);
+        const result = await this.dashboardService.getSummery();
         return res.status(200).json({ success: true, data: result });
     }
 };
