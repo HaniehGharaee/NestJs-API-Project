@@ -11,9 +11,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardService = void 0;
 const common_1 = require("@nestjs/common");
+const moment = require("moment");
 let DashboardService = class DashboardService {
     constructor() { }
-    async getSummery(userId) {
+    async getSummery() {
+        const today = moment().startOf('day').toDate();
+        const currentMonth = moment().startOf('month').toDate();
+        const currentYear = moment().startOf('year').toDate();
+        return {
+            totalStores: await 100,
+            totalMedicines: await 120,
+            totalCustomers: await 130,
+            totalSuppliers: await 140,
+            totalProductSale: await 250,
+            todayProductSale: await 1000,
+            thisMonthSale: await 2570000,
+            thisYearProductSale: await 150,
+            totalProductPurchase: await 190,
+            todayProductPurchase: await 2580,
+            thisMonthPurchase: await 256,
+            thisYearProductPurchase: await 589,
+            totalEarning: await 578,
+            todayEarning: await 741,
+            thisMonthEarning: await 852,
+            thisYearEarning: await 693,
+            totalCategories: await 654,
+            totalTransactions: await 100,
+        };
     }
 };
 exports.DashboardService = DashboardService;
