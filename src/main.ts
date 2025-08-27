@@ -18,6 +18,12 @@ async function bootstrap() {
     SwaggerModule.setup(path, app, document);
   }
 
+  app.enableCors({
+    origin: 'http://localhost:3001', // front address
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/#/`);
 }
