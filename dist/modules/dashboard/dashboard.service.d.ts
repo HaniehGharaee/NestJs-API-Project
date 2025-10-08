@@ -20,11 +20,4 @@ export declare class DashboardService {
         totalCategories: number;
         totalTransactions: number;
     }>;
-    getSalesTrend(year: number): Promise<{
-        year: number;
-        sales: {
-            month: number;
-            total: number;
-        }[];
-    }>;
 }

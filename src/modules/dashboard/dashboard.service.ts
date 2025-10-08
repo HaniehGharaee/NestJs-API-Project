@@ -77,28 +77,28 @@ export class DashboardService {
       totalTransactions: await 100,
     };
   }
-  async getSalesTrend(year: number) {
-    const rawData = await this.orderRepo
-      .createQueryBuilder('order')
-      .select('EXTRACT(MONTH FROM order.createdAt)', 'month')
-      .addSelect('SUM(order.totalPrice)', 'total')
-      .where('EXTRACT(YEAR FROM order.createdAt) = :year', { year })
-      .groupBy('month')
-      .orderBy('month', 'ASC')
-      .getRawMany();
+  // async getSalesTrend(year: number) {
+  //   const rawData = await this.orderRepo
+  //     .createQueryBuilder('order')
+  //     .select('EXTRACT(MONTH FROM order.createdAt)', 'month')
+  //     .addSelect('SUM(order.totalPrice)', 'total')
+  //     .where('EXTRACT(YEAR FROM order.createdAt) = :year', { year })
+  //     .groupBy('month')
+  //     .orderBy('month', 'ASC')
+  //     .getRawMany();
 
-    const result = Array.from({ length: 12 }, (_, i) => ({
-      month: i + 1,
-      total: 0,
-    }));
+  //   const result = Array.from({ length: 12 }, (_, i) => ({
+  //     month: i + 1,
+  //     total: 0,
+  //   }));
 
-    rawData.forEach((row) => {
-      result[row.month - 1].total = +row.total;
-    });
+  //   rawData.forEach((row) => {
+  //     result[row.month - 1].total = +row.total;
+  //   });
 
-    return {
-      year,
-      sales: result, // [{month:1,total:5000}, {month:2,total:12000}, ...]
-    };
-  }
+  //   return {
+  //     year,
+  //     sales: result, // [{month:1,total:5000}, {month:2,total:12000}, ...]
+  //   };
+  // }
 }
