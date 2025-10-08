@@ -23,8 +23,8 @@ export class DashboardController {
     const result = await this.dashboardService.getSummery(); //req.user.pharmacyId
     return res.status(200).json({ success: true, data: result})
   }
-  @Get('sales-trend')
-  async getSalesTrend(@Query('year') year: string){
-    return this.dashboardService.getSalesTrend(+year || new Date().getFullYear())
-  }
+  // @Get('sales-trend')
+  // async getSalesTrend(@Query('year') year: string){
+  //   return this.dashboardService.getSalesTrend(+year || new Date().getFullYear())
+  // }
 }

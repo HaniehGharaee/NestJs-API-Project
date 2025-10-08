@@ -23,9 +23,6 @@ let DashboardController = class DashboardController {
         const result = await this.dashboardService.getSummery();
         return res.status(200).json({ success: true, data: result });
     }
-    async getSalesTrend(year) {
-        return this.dashboardService.getSalesTrend(+year || new Date().getFullYear());
-    }
 };
 exports.DashboardController = DashboardController;
 __decorate([
@@ -36,13 +33,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], DashboardController.prototype, "getDashboardSummery", null);
-__decorate([
-    (0, common_1.Get)('sales-trend'),
-    __param(0, (0, common_1.Query)('year')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], DashboardController.prototype, "getSalesTrend", null);
 exports.DashboardController = DashboardController = __decorate([
     (0, common_1.Controller)('dashboard'),
     __metadata("design:paramtypes", [dashboard_service_1.DashboardService])
