@@ -26,6 +26,41 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## 🏗️Project Architecture
+
+NestJS — Modular backend framework
+MongoDB + Mongoose — Primary database & ODM (Object Data Modeling)
+Class Validator / Transformer — Validation for DTOs
+Swagger — API documentation
+
+In NestJS (and in layered architectures in general),
+Level 1: Basic / CRUD Architecture
+feature/
+├── feature.controller.ts
+├── feature.service.ts
+├── feature.schema.ts
+├── dto/
+
+Level 2: Modular / Structured Architecture
+feature/
+├── feature.controller.ts
+├── feature.service.ts
+├── feature.schema.ts
+├── dto/
+├── feature.constant.ts
+
+Level 3: Enterprise / Clean Architecture
+feature/
+├── feature.controller.ts                → Handles HTTP requests & routing
+├── feature.service.ts                   → Contains business logic
+├── feature.repository.ts                → Handles data access & persistence
+├── feature.entity.ts                    → Database entity definition (for SQL database‌s)
+├── feature.schema.ts                    → Same feature.entity.ts (just for MongoDB database)
+├── dto/                                 → Data Transfer Objects (input/output)
+├── feature.interface.ts                 → Type & interface definitions
+├── feature.constant.ts                  → Constant values and enums
+├── feature.module.ts                    → NestJS module configuration
+
 ## Project setup
 
 ```bash
