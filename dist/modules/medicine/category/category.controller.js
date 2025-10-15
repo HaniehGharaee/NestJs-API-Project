@@ -12,6 +12,6 @@ let CategoryController = class CategoryController {
 };
 exports.CategoryController = CategoryController;
 exports.CategoryController = CategoryController = __decorate([
-    (0, common_1.Controller)('category')
+    (0, common_1.Controller)('medicine/categorie')
 ], CategoryController);
 //# sourceMappingURL=category.controller.js.map
