@@ -25,6 +25,7 @@ exports.CategoryModule = CategoryModule = __decorate([
         ],
         controllers: [category_controller_1.CategoryController],
         providers: [category_service_1.CategoryService, category_repository_1.CategoryRepository],
+        exports: [category_service_1.CategoryService],
     })
 ], CategoryModule);
 //# sourceMappingURL=category.module.js.map

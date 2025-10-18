@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 @Injectable() //this is a decorator comes from @nestjs/common.
 // It tells Nest that this class is a provider and should be managed by Nest’s Dependency Injection (DI) system.
 // This allows you to register it inside the providers array of a module and inject it into services or controllers through the constructor.
+//CategoryRepository Injected by CategoryService
 export class CategoryRepository {
   constructor(
     //constructor(...) {}
