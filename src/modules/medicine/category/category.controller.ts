@@ -9,8 +9,14 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
+  @Get('getAll')
+  @ApiOperation({ summary: 'Get all categories' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all categories retrieved successfully',
+  })
   async getCategories() {
-    return this.categoryService.getAllCategories();
+    const result = await this.categoryService.getAllCategories();
+    return { success: true, data: result };
   }
 }

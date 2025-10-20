@@ -14,9 +14,6 @@ export class CategoryService {
 
   async getAllCategories() {
     const categories = await this.categoryRepo.findAll();
-    return {
-      success: true,
-      data: categories,
-    };
+    return categories;
   }
 }
