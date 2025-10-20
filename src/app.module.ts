@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 // import { RolesGuard } from './modules/rbac/guards/roles.guard';
 import { UserModule } from './modules/user/user.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { CategoryModule } from './modules/medicine/category/category.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     //UsersModule,
     AuthModule,
     UserModule,
+    CategoryModule,
     DashboardModule,
   ],
   providers: [
