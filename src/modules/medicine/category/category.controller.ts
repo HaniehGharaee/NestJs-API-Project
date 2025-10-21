@@ -1,7 +1,7 @@
 /*
 Managing endpoints and HTTP ingress
 */
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
