@@ -2,10 +2,17 @@
 Separating the data layer from the service logic
 */
 
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category } from './category.schema';
 import { Model } from 'mongoose';
+import { CreateCategoryDto } from './Dto/createCategory.dto';
+import { CategoryDocument } from './category.schema';
 
 @Injectable() //this is a decorator comes from @nestjs/common.
 // It tells Nest that this class is a provider and should be managed by Nest’s Dependency Injection (DI) system.
@@ -29,5 +36,24 @@ export class CategoryRepository {
   async findAll(): Promise<Category[]> {
     //This means that this function will return an array of Categories in the future.
     return this.categoryModel.find().lean();
+  }
+
+  async createCategory(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<CategoryDocument> {
+    try {
+      const newCategory = new this.categoryModel({
+        ...createCategoryDto, //*!
+      });
+      console.log('createCategoryDtocreateCategoryDto', createCategoryDto);
+      return await newCategory.save();
+    } catch (error) {
+      if ((error as any)?.code === 11000) {
+        // Duplicate key (MongoDB unique index violation)
+        throw new ConflictException('Category with this name already exists');
+      }
+      //this.logger.error('Failed to create category', error.stack); ????
+      throw new InternalServerErrorException('Failed to create category');
+    }
   }
 }
