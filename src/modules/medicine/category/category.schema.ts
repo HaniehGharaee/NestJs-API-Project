@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 export type CategoryDocument = Category & Document; //Defines a composite type that is a combination of Category (class/schema) and Document (Mongoose type for documents).
 @Schema({ // This is a class decorator that says the Category class is a schema.
