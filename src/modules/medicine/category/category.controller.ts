@@ -26,6 +26,7 @@ export class CategoryController {
   //Controller should not have too many try/catch ❌
   //Because NestJS automatically handles Exceptions.
   @Post('create')
+  @ApiOperation({ summary: 'Create categories' })
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     const createCategory =
       await this.categoryService.createCategory(createCategoryDto);

@@ -29,11 +29,13 @@ export class CategoryService {
     try {
       return await this.categoryRepo.createCategory(createCategoryDto);
     } catch (error) {
+      console.error('❌ createCategory error:', error);
       if (error instanceof ConflictException) {
         throw error;
       }
       throw new InternalServerErrorException(
         'Unexpected error while creating category',
+        error.message,
       );
     }
   }

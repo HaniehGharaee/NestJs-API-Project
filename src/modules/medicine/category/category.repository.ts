@@ -29,7 +29,7 @@ export class CategoryRepository {
     //private readonly categoryModel: Model<Category>:
     //This defines a private and read-only property that stores the injected Mongoose Model instance.
     //The type Model<Category> (from mongoose) gives access to built-in model methods like find, findOne, create, update, etc.
-    @InjectModel(Category.name) private readonly categoryModel: Model<Category>,
+    @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>,
   ) {}
   //When you read data from a database (like MongoDB), it is an I/O (input/output) operation and does not return results immediately.
   // Mongoose uses Promises for these operations so that you can get the results after they are completed.
