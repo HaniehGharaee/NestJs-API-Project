@@ -24,6 +24,21 @@ let CategoryRepository = class CategoryRepository {
     async findAll() {
         return this.categoryModel.find().lean();
     }
+    async createCategory(createCategoryDto) {
+        try {
+            const newCategory = new this.categoryModel({
+                ...createCategoryDto,
+            });
+            console.log('createCategoryDtocreateCategoryDto', createCategoryDto);
+            return await newCategory.save();
+        }
+        catch (error) {
+            if (error?.code === 11000) {
+                throw new common_1.ConflictException('Category with this name already exists');
+            }
+            throw new common_1.InternalServerErrorException('Failed to create category');
+        }
+    }
 };
 exports.CategoryRepository = CategoryRepository;
 exports.CategoryRepository = CategoryRepository = __decorate([

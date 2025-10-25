@@ -18,10 +18,19 @@ let CategoryService = class CategoryService {
     }
     async getAllCategories() {
         const categories = await this.categoryRepo.findAll();
-        return {
-            success: true,
-            data: categories,
-        };
+        return categories;
+    }
+    async createCategory(createCategoryDto) {
+        try {
+            return await this.categoryRepo.createCategory(createCategoryDto);
+        }
+        catch (error) {
+            console.error('❌ createCategory error:', error);
+            if (error instanceof common_1.ConflictException) {
+                throw error;
+            }
+            throw new common_1.InternalServerErrorException('Unexpected error while creating category', error.message);
+        }
     }
 };
 exports.CategoryService = CategoryService;

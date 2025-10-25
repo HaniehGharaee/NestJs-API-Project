@@ -17,18 +17,18 @@ exports.Category = Category;
 __decorate([
     (0, mongoose_1.Prop)({ required: true, trim: true }),
     __metadata("design:type", String)
-], Category.prototype, "name", void 0);
+], Category.prototype, "categoryName", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Category.prototype, "type", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", Number)
 ], Category.prototype, "code", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: true }),
-    __metadata("design:type", Boolean)
+    (0, mongoose_1.Prop)({ required: true, enum: ['active', 'inactive'], default: 'active' }),
+    __metadata("design:type", String)
 ], Category.prototype, "status", void 0);
 exports.Category = Category = __decorate([
     (0, mongoose_1.Schema)({
