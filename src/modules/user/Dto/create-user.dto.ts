@@ -1,36 +1,8 @@
-import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from '../schema/user.schema';
 
 export class createUserDto {
-  @IsNotEmpty({ message: 'Phone number is required' })
-  @IsString({ message: 'Phone number must be a string' })
-  @Length(11, 11, {
-    message: 'Phone number must be exactly 11 characters long',
-  })
-  @Matches(/^[0-9]+$/, { message: 'Phone number must contain only digits' })
-  @ApiProperty({
-    description: 'Phone number of the user',
-    example: '1234567890',
-  })
-  phone: string;
-
-  @IsNotEmpty({ message: 'nationalId is required' })
-  @IsString({ message: 'nationalId must be a string' })
-  @Matches(/^[0-9]+$/, { message: 'nationalId must contain only digits' })
-  @Length(10, 10, { message: 'nationalId must be exactly 10 digits long' })
-  @ApiProperty({
-    description: 'Enter your nationalId',
-    example: '0020956071',
-  })
-  nationalId: string;
-
-  @IsString({ message: 'role must be a string' })
-  @ApiProperty({
-    description: 'Enter role of user',
-    example: 'admin',
-  })
-  role: string;
-
   @IsNotEmpty({ message: 'firstName is required' })
   @IsString({ message: 'firstName must be a string' })
   @ApiProperty({
@@ -46,4 +18,36 @@ export class createUserDto {
     example: 'Gharaee',
   })
   lastName: string;
+
+  @IsNotEmpty({ message: 'username is required' })
+  @IsString({ message: 'username must be a string' })
+  @ApiProperty({
+    description: 'Enter your username',
+    example: 'admin@pharmacy',
+  })
+  username: string;
+
+  @IsNotEmpty({ message: 'password is required' })
+  @IsString({ message: 'password must be a string' })
+  @ApiProperty({
+    description: 'Enter your password',
+    example: 'StrongPass@123',
+  })
+  @MinLength(6)
+  password: string;
+
+  @IsNotEmpty({ message: 'role is required' })
+  @ApiProperty({
+    enum: UserRole,
+    example: UserRole.SUPER_ADMIN,
+  })
+  role: UserRole;
+
+  @IsString({ message: 'pharmacyId must be a string' })
+  @IsOptional()
+  @ApiProperty({
+    example: '676c91d9e6a30b78d3c4e412',
+    required: false,
+  })
+  pharmacyId?: string;
 }
