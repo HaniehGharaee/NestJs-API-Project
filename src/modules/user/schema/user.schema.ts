@@ -1,9 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { UserRole } from './roles.enum';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 export type UserDocument = User & Document;
-//@Schema({})
+export enum UserRole {
+  SUPER_ADMIN = 'SuperAdmin',
+  PHARMACY_ADMIN = 'pharmacyAdmin',
+  PHARMACIST = 'pharmacist',
+  ACCOUNTANT = 'accountant',
+}
+
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.password;
+      ret.id = doc._id.toString();
+      return ret;
+    },
+  },
+})
 export class User extends Document {
   @Prop({
     default: null,
@@ -17,8 +35,11 @@ export class User extends Document {
   })
   lastName: string;
 
-  @Prop()
-  fullName: string;
+  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  username: string;
+
+  @Prop({ required: true })
+  password: string;
 
   @Prop()
   email: string;
@@ -38,12 +59,12 @@ export class User extends Document {
   @Prop({
     type: String,
     enum: UserRole,
-    default: UserRole.USER,
+    default: UserRole.SUPER_ADMIN,
   })
   role: UserRole;
 
   @Prop({ type: Types.ObjectId, ref: 'Pharmacy' })
-  pharmacyId: Types.ObjectId;
+  pharmacyId: Types.ObjectId; // for connect to a pharmacy
 
   @Prop()
   address: string;
@@ -51,3 +72,8 @@ export class User extends Document {
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.plugin(mongoosePaginate);
+
+//virtual fullName (not saved in DB) (show in Response or JSON)
+UserSchema.virtual('fullName').get(function (this: UserDocument) {
+  return `${this.firstName || ''} ${this.lastName || ''} `.trim();
+});
