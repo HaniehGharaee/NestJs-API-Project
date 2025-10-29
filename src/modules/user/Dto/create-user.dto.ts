@@ -1,8 +1,17 @@
-import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+  Length,
+  Matches,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../schema/user.schema';
 
-export class createUserDto {
+export class CreateUserDto {
+  // You should not get the fullName from the user!
+  // Because this field is calculated, not entered.
   @IsNotEmpty({ message: 'firstName is required' })
   @IsString({ message: 'firstName must be a string' })
   @ApiProperty({
@@ -18,6 +27,18 @@ export class createUserDto {
     example: 'Gharaee',
   })
   lastName: string;
+
+  @IsNotEmpty({ message: 'Phone number is required' })
+  @IsString({ message: 'Phone number must be a string' })
+  @Length(11, 11, {
+    message: 'Phone number must be exactly 11 characters long',
+  })
+  @Matches(/^[0-9]+$/, { message: 'Phone number must contain only digits' })
+  @ApiProperty({
+    description: 'Phone number of the user',
+    example: '1234567890',
+  })
+  phone: string;
 
   @IsNotEmpty({ message: 'username is required' })
   @IsString({ message: 'username must be a string' })
