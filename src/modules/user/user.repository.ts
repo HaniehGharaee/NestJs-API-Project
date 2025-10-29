@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import path from 'path';
-import { createUserDto } from './Dto/create-user.dto';
+import { CreateUserDto } from './Dto/create-user.dto';
 import { PaginateModel } from 'mongoose';
 import { User, UserDocument } from 'src/modules/user/schema/user.schema';
 
@@ -13,21 +13,17 @@ export class UserRepository {
     private readonly userModel: PaginateModel<UserDocument>,
   ) {}
 
-  async findExistingUser(
-    phone: string,
-    nationalId: string,
-  ): Promise<User | null> {
+  async findExistingUser(phone: string): Promise<User | null> {
     try {
       return await this.userModel.findOne({
-        $or: [{ phone }, { nationalId }],
+        $or: [{ phone }],
       });
     } catch (error) {
       this.logger.error('Error finding user', error);
       throw error;
     }
   }
-
-  async create(createUserDto: createUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const createUser = new this.userModel(createUserDto);
 
@@ -37,4 +33,9 @@ export class UserRepository {
       throw error;
     }
   }
+  async findAll(): Promise<User[]> {
+    return this.userModel.find().lean();
+    //The difference between .find() and .find().lean() is an important performance tip in Mongoose.
+  }
+
 }

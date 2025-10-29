@@ -4,50 +4,58 @@ import {
   Controller,
   HttpStatus,
   Post,
+  Get,
   UseGuards,
   UsePipes,
   ValidationPipe,
   ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Response } from 'express'
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Roles } from './schema/roles.decorator';
-import { createUserDto } from './Dto/create-user.dto';
+import { CreateUserDto } from './Dto/create-user.dto';
 
 @Controller('user')
-@ApiTags('user')
+@ApiTags('User')
 @UseGuards()
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post('create')
-  @Roles('admin')
+  @Roles('superAdmin')
+  @ApiOperation({ summary: 'Create user' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() createUserDto: createUserDto, @Res() res: Response) {
+  async create(@Body() createUserDto: CreateUserDto) {
     try {
-      const user = await this.userService.createUser(createUserDto)
-      return res.status(HttpStatus.CREATED).json({
+      const user = await this.userService.createUser(createUserDto);
+      return {
         success: true,
-        message: "",
+        message: 'User created successfully',
         data: user,
         status: HttpStatus.CREATED,
-      });
+      };
     } catch (error) {
       if (error instanceof ConflictException) {
-        return res.status(HttpStatus.CONFLICT).json({
+        return {
           success: false,
           message: error.message,
           status: HttpStatus.CONFLICT,
-        })
-
+        };
       }
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      return {
         success: false,
-        message: "",
+        message: '',
         error: error.message,
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-      });
+      };
     }
+  }
+
+  @Get('getAllUsers')
+  @Roles('superAdmin')
+  @ApiOperation({ summary: 'Get all users' })
+  async getUsers() {
+    const result = await this.userService.getAllUsers();
+    return { success: true, data: result };
   }
 }

@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 export type UserDocument = User & Document;
 export enum UserRole {
-  SUPER_ADMIN = 'SuperAdmin',
+  SUPER_ADMIN = 'superAdmin',
   PHARMACY_ADMIN = 'pharmacyAdmin',
   PHARMACIST = 'pharmacist',
   ACCOUNTANT = 'accountant',
