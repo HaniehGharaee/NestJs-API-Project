@@ -9,12 +9,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserDto = void 0;
+exports.CreateUserDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
-class createUserDto {
+const user_schema_1 = require("../schema/user.schema");
+class CreateUserDto {
 }
-exports.createUserDto = createUserDto;
+exports.CreateUserDto = CreateUserDto;
+__decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'firstName is required' }),
+    (0, class_validator_1.IsString)({ message: 'firstName must be a string' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Enter your firstName',
+        example: 'Hanieh',
+    }),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "firstName", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'lastName is required' }),
+    (0, class_validator_1.IsString)({ message: 'lastName must be a string' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Enter your lastName',
+        example: 'Gharaee',
+    }),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "lastName", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Phone number is required' }),
     (0, class_validator_1.IsString)({ message: 'Phone number must be a string' }),
@@ -24,45 +43,44 @@ __decorate([
     (0, class_validator_1.Matches)(/^[0-9]+$/, { message: 'Phone number must contain only digits' }),
     (0, swagger_1.ApiProperty)({
         description: 'Phone number of the user',
-        example: '1234567890',
+        example: '09128439793',
     }),
     __metadata("design:type", String)
-], createUserDto.prototype, "phone", void 0);
+], CreateUserDto.prototype, "phone", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'nationalId is required' }),
-    (0, class_validator_1.IsString)({ message: 'nationalId must be a string' }),
-    (0, class_validator_1.Matches)(/^[0-9]+$/, { message: 'nationalId must contain only digits' }),
-    (0, class_validator_1.Length)(10, 10, { message: 'nationalId must be exactly 10 digits long' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'username is required' }),
+    (0, class_validator_1.IsString)({ message: 'username must be a string' }),
     (0, swagger_1.ApiProperty)({
-        description: 'Enter your nationalId',
-        example: '0020956071',
+        description: 'Enter your username',
+        example: 'admin@pharmacy',
     }),
     __metadata("design:type", String)
-], createUserDto.prototype, "nationalId", void 0);
+], CreateUserDto.prototype, "username", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'role must be a string' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'password is required' }),
+    (0, class_validator_1.IsString)({ message: 'password must be a string' }),
     (0, swagger_1.ApiProperty)({
-        description: 'Enter role of user',
-        example: 'admin',
+        description: 'Enter your password',
+        example: 'StrongPass@123',
     }),
+    (0, class_validator_1.MinLength)(6),
     __metadata("design:type", String)
-], createUserDto.prototype, "role", void 0);
+], CreateUserDto.prototype, "password", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'firstName is required' }),
-    (0, class_validator_1.IsString)({ message: 'firstName must be a string' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'role is required' }),
     (0, swagger_1.ApiProperty)({
-        description: 'Enter your firstName',
-        example: 'Hanieh',
+        enum: user_schema_1.UserRole,
+        example: user_schema_1.UserRole.SUPER_ADMIN,
     }),
     __metadata("design:type", String)
-], createUserDto.prototype, "firstName", void 0);
+], CreateUserDto.prototype, "role", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'lastName is required' }),
-    (0, class_validator_1.IsString)({ message: 'lastName must be a string' }),
+    (0, class_validator_1.IsString)({ message: 'pharmacyId must be a string' }),
+    (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
-        description: 'Enter your lastName',
-        example: 'Gharaee',
+        example: '676c91d9e6a30b78d3c4e412',
+        required: false,
     }),
     __metadata("design:type", String)
-], createUserDto.prototype, "lastName", void 0);
+], CreateUserDto.prototype, "pharmacyId", void 0);
 //# sourceMappingURL=create-user.dto.js.map

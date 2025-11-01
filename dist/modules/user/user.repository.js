@@ -22,26 +22,15 @@ let UserRepository = UserRepository_1 = class UserRepository {
         this.userModel = userModel;
         this.logger = new common_1.Logger(UserRepository_1.name);
     }
-    async findExistingUser(phone, nationalId) {
-        try {
-            return await this.userModel.findOne({
-                $or: [{ phone }, { nationalId }],
-            });
-        }
-        catch (error) {
-            this.logger.error('Error finding user', error);
-            throw error;
-        }
+    async findByPhone(phone) {
+        return await this.userModel.findOne({ phone }).exec();
     }
     async create(createUserDto) {
-        try {
-            const createUser = new this.userModel(createUserDto);
-            return await createUser.save();
-        }
-        catch (error) {
-            this.logger.error('Error finding user', error);
-            throw error;
-        }
+        const user = new this.userModel(createUserDto);
+        return await user.save();
+    }
+    async findAll() {
+        return this.userModel.find().lean();
     }
 };
 exports.UserRepository = UserRepository;

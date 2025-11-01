@@ -36,7 +36,7 @@ export class CreateUserDto {
   @Matches(/^[0-9]+$/, { message: 'Phone number must contain only digits' })
   @ApiProperty({
     description: 'Phone number of the user',
-    example: '1234567890',
+    example: '09128439793',
   })
   phone: string;
 

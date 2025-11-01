@@ -1,8 +1,19 @@
+import { HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Response } from 'express';
-import { createUserDto } from './Dto/create-user.dto';
+import { CreateUserDto } from './Dto/create-user.dto';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    create(createUserDto: createUserDto, res: Response): Promise<Response<any, Record<string, any>>>;
+    create(createUserDto: CreateUserDto): Promise<{
+        success: boolean;
+        message: string;
+        data: import("./schema/user.schema").User;
+        statusCode: HttpStatus;
+    }>;
+    getUsers(): Promise<{
+        success: boolean;
+        statusCode: HttpStatus;
+        message: string;
+        data: import("./schema/user.schema").User[];
+    }>;
 }

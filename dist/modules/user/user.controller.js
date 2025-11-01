@@ -22,47 +22,46 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    async create(createUserDto, res) {
-        try {
-            const user = await this.userService.createUser(createUserDto);
-            return res.status(common_1.HttpStatus.CREATED).json({
-                success: true,
-                message: "",
-                data: user,
-                status: common_1.HttpStatus.CREATED,
-            });
-        }
-        catch (error) {
-            if (error instanceof common_1.ConflictException) {
-                return res.status(common_1.HttpStatus.CONFLICT).json({
-                    success: false,
-                    message: error.message,
-                    status: common_1.HttpStatus.CONFLICT,
-                });
-            }
-            return res.status(common_1.HttpStatus.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: "",
-                error: error.message,
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-            });
-        }
+    async create(createUserDto) {
+        const user = await this.userService.createUser(createUserDto);
+        return {
+            success: true,
+            message: 'User created successfully',
+            data: user,
+            statusCode: common_1.HttpStatus.CREATED,
+        };
+    }
+    async getUsers() {
+        const result = await this.userService.getAllUsers();
+        return {
+            success: true,
+            statusCode: common_1.HttpStatus.OK,
+            message: 'Fetched all users successfully',
+            data: result,
+        };
     }
 };
 exports.UserController = UserController;
 __decorate([
     (0, common_1.Post)('create'),
-    (0, roles_decorator_1.Roles)('admin'),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
+    (0, roles_decorator_1.Roles)('superAdmin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.createUserDto, Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('getAllUsers'),
+    (0, roles_decorator_1.Roles)('superAdmin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all users' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUsers", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
-    (0, swagger_1.ApiTags)('user'),
+    (0, swagger_1.ApiTags)('User'),
     (0, common_1.UseGuards)(),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);

@@ -1,10 +1,16 @@
 import { Document, Types } from 'mongoose';
-import { UserRole } from './roles.enum';
 export type UserDocument = User & Document;
+export declare enum UserRole {
+    SUPER_ADMIN = "superAdmin",
+    PHARMACY_ADMIN = "pharmacyAdmin",
+    PHARMACIST = "pharmacist",
+    ACCOUNTANT = "accountant"
+}
 export declare class User extends Document {
     firstName: string;
     lastName: string;
-    fullName: string;
+    username: string;
+    password: string;
     email: string;
     nationalId: string;
     phone: string;

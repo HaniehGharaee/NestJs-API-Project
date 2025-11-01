@@ -19,24 +19,25 @@ let UserService = UserService_1 = class UserService {
         this.logger = new common_1.Logger(UserService_1.name);
     }
     async createUser(createUserDto) {
-        const { phone, nationalId, role, firstName, lastName } = createUserDto;
+        const existingUser = await this.userRepository.findByPhone(createUserDto.phone);
+        if (existingUser) {
+            throw new common_1.ConflictException('A user with this phone already exists');
+        }
         try {
-            const existingUser = await this.userRepository.findExistingUser(phone, nationalId);
-            if (existingUser) {
-                throw new common_1.ConflictException('کاربر با این شماره موبایل یا کد ملی وجود دارد');
-            }
-            const user = {
-                phone,
-                nationalId,
-                firstName,
-                lastName,
-                role,
-            };
-            return await this.userRepository.create(user);
+            return await this.userRepository.create(createUserDto);
         }
         catch (error) {
-            this.logger.error('Error creating user', error);
-            throw error;
+            this.logger.error('Database error while creating user', error);
+            throw new common_1.InternalServerErrorException('Failed to create creating user');
+        }
+    }
+    async getAllUsers() {
+        try {
+            return await this.userRepository.findAll();
+        }
+        catch (error) {
+            this.logger.error('Database error while fetching users', error);
+            throw new common_1.InternalServerErrorException('Failed to fetch users');
         }
     }
 };

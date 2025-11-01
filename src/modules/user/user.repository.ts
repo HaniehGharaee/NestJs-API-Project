@@ -8,34 +8,24 @@ import { User, UserDocument } from 'src/modules/user/schema/user.schema';
 @Injectable()
 export class UserRepository {
   private readonly logger = new Logger(UserRepository.name);
+
   constructor(
     @InjectModel(User.name)
     private readonly userModel: PaginateModel<UserDocument>,
   ) {}
 
-  async findExistingUser(phone: string): Promise<User | null> {
-    try {
-      return await this.userModel.findOne({
-        $or: [{ phone }],
-      });
-    } catch (error) {
-      this.logger.error('Error finding user', error);
-      throw error;
-    }
+  async findByPhone(phone: string): Promise<User | null> {
+    return await this.userModel.findOne({ phone }).exec();
+    //$or: [{ phone }], //$or is used when you want to have multiple alternative conditions
   }
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const createUser = new this.userModel(createUserDto);
 
-      return await createUser.save();
-    } catch (error) {
-      this.logger.error('Error finding user', error);
-      throw error;
-    }
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = new this.userModel(createUserDto);
+    return await user.save();
   }
+  
   async findAll(): Promise<User[]> {
     return this.userModel.find().lean();
     //The difference between .find() and .find().lean() is an important performance tip in Mongoose.
   }
-
 }
