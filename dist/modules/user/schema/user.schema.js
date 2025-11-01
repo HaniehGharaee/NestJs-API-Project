@@ -9,13 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserSchema = exports.User = void 0;
+exports.UserSchema = exports.User = exports.UserRole = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-const roles_enum_1 = require("./roles.enum");
 const mongoosePaginate = require("mongoose-paginate-v2");
-class User extends mongoose_2.Document {
-}
+var UserRole;
+(function (UserRole) {
+    UserRole["SUPER_ADMIN"] = "superAdmin";
+    UserRole["PHARMACY_ADMIN"] = "pharmacyAdmin";
+    UserRole["PHARMACIST"] = "pharmacist";
+    UserRole["ACCOUNTANT"] = "accountant";
+})(UserRole || (exports.UserRole = UserRole = {}));
+let User = class User extends mongoose_2.Document {
+};
 exports.User = User;
 __decorate([
     (0, mongoose_1.Prop)({
@@ -32,9 +38,13 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ required: true, unique: true, lowercase: true, trim: true }),
     __metadata("design:type", String)
-], User.prototype, "fullName", void 0);
+], User.prototype, "username", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    __metadata("design:type", String)
+], User.prototype, "password", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
@@ -56,8 +66,8 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({
         type: String,
-        enum: roles_enum_1.UserRole,
-        default: roles_enum_1.UserRole.USER,
+        enum: UserRole,
+        default: UserRole.SUPER_ADMIN,
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
@@ -69,6 +79,24 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], User.prototype, "address", void 0);
+exports.User = User = __decorate([
+    (0, mongoose_1.Schema)({
+        timestamps: true,
+        toJSON: {
+            virtuals: true,
+            versionKey: false,
+            transform: (doc, ret) => {
+                delete ret._id;
+                delete ret.password;
+                ret.id = doc._id.toString();
+                return ret;
+            },
+        },
+    })
+], User);
 exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 exports.UserSchema.plugin(mongoosePaginate);
+exports.UserSchema.virtual('fullName').get(function () {
+    return `${this.firstName || ''} ${this.lastName || ''} `.trim();
+});
 //# sourceMappingURL=user.schema.js.map

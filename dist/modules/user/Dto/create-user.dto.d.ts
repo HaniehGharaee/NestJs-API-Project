@@ -1,7 +1,10 @@
-export declare class createUserDto {
-    phone: string;
-    nationalId: string;
-    role: string;
+import { UserRole } from '../schema/user.schema';
+export declare class CreateUserDto {
     firstName: string;
     lastName: string;
+    phone: string;
+    username: string;
+    password: string;
+    role: UserRole;
+    pharmacyId?: string;
 }

@@ -1,20 +1,16 @@
 import {
   Body,
-  Res,
   Controller,
   HttpStatus,
   Post,
   Get,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
-  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Roles } from './schema/roles.decorator';
 import { CreateUserDto } from './Dto/create-user.dto';
-
+//The Controller only handles input and output. It has no try/catch, no error logic.
 @Controller('user')
 @ApiTags('User')
 @UseGuards()
@@ -23,32 +19,15 @@ export class UserController {
 
   @Post('create')
   @Roles('superAdmin')
-  @ApiOperation({ summary: 'Create user' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Create a new user' })
   async create(@Body() createUserDto: CreateUserDto) {
-    try {
-      const user = await this.userService.createUser(createUserDto);
-      return {
-        success: true,
-        message: 'User created successfully',
-        data: user,
-        status: HttpStatus.CREATED,
-      };
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        return {
-          success: false,
-          message: error.message,
-          status: HttpStatus.CONFLICT,
-        };
-      }
-      return {
-        success: false,
-        message: '',
-        error: error.message,
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      };
-    }
+    const user = await this.userService.createUser(createUserDto);
+    return {
+      success: true,
+      message: 'User created successfully',
+      data: user,
+      statusCode: HttpStatus.CREATED,
+    };
   }
 
   @Get('getAllUsers')
@@ -56,6 +35,11 @@ export class UserController {
   @ApiOperation({ summary: 'Get all users' })
   async getUsers() {
     const result = await this.userService.getAllUsers();
-    return { success: true, data: result };
+    return {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: 'Fetched all users successfully',
+      data: result,
+    };
   }
 }
