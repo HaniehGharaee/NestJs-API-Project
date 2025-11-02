@@ -25,7 +25,7 @@ export class UserService {
       return await this.userRepository.create(createUserDto);
     } catch (error) {
       this.logger.error('Database error while creating user', error);
-      throw new InternalServerErrorException('Failed to create creating user');
+      throw new InternalServerErrorException('Failed to create user');
     }
   }
 
