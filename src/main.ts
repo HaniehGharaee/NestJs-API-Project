@@ -4,6 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { createSwaggerConfig } from './config/config.swagger';
 import { Logger } from '@nestjs/common';
+import { AllExceptionFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,9 @@ async function bootstrap() {
     credentials: true,
   });
 
+  //Global Eception Filter
+  app.useGlobalFilters(new AllExceptionFilter())
+  
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/#/`);
 }
