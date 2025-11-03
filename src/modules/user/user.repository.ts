@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import path from 'path';
 import { CreateUserDto } from './Dto/create-user.dto';
 import { PaginateModel } from 'mongoose';
 import { User, UserDocument } from 'src/modules/user/schema/user.schema';
