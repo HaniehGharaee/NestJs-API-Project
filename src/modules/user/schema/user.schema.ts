@@ -69,6 +69,15 @@ export class User extends Document {
 
   @Prop()
   address: string;
+
+  //In Mongoose, when you want to define an array of ObjectIds (which point to another model),
+  //Each user may log in on multiple devices (or browsers)
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'RefreshToken' }] })
+  refreshToken?: Types.ObjectId[];
+
+  //If you only want to store one RefreshToken per user (not multiple ones)
+  //   @Prop({ type: Types.ObjectId, ref: 'RefreshToken' })
+  // refreshToken?: Types.ObjectId;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
 
