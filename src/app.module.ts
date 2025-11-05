@@ -15,9 +15,9 @@ import { CategoryModule } from './modules/medicine/category/category.module';
     ConfigModule.forRoot({
       //load: [configuration],
       isGlobal: true,
+      envFilePath: './env',
     }),
     DatabaseModule,
-    //UsersModule,
     AuthModule,
     UserModule,
     CategoryModule,
