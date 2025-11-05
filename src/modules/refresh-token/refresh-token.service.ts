@@ -1,4 +1,51 @@
 import { Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
+import { Model } from 'mongoose';
+import { RefreshTokenDocument } from './schema/refresh-token.schema';
 
 @Injectable()
-export class RefreshTokenService {}
+export class RefreshTokenService {
+  constructor(
+    private configService: ConfigService,
+    private refreshTokenModel: Model<RefreshTokenDocument>,
+  ) {}
+
+  async creatRefreshToken(
+    userId: string,
+    userAgent?: string,
+    ipAddress?: string,
+  ) {
+    // Create token with SECRET and expiration time from ENV
+    const token = jwt.sign(
+      { userId },
+      this.configService.get('JWT_REFRESH_SECRET'),
+      {
+        expiresIn: this.configService.get('JWT_REFRESH_EXPIRES'),
+      },
+    );
+    // Create expiration time to store in DB
+    const expireAt = new Date();
+    const expiresInSeconds = this.convertExpireToSeconds(
+      this.configService.get<string>('JWT_REFRESH_EXPIRES'),
+    );
+    expireAt.setSeconds(expireAt.getSeconds() + expiresInSeconds);
+
+    const refreshToken = new this.refreshTokenModel({
+      user: userId,
+      token,
+      expireAt,
+      userAgent: userAgent || null,
+      ipAddress: ipAddress || null,
+    });
+    return refreshToken.save();
+  }
+
+  private convertExpireToSeconds(expire: string) {
+    const time = parseInt(expire);
+    if (expire.endsWith('H')) return time * 3600;
+    if (expire.endsWith('m')) return time * 60;
+    if (expire.endsWith('s')) return time;
+    return time;
+  }
+}
