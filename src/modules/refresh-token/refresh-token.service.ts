@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { RefreshTokenDocument } from './schema/refresh-token.schema';
+import { promises } from 'dns';
 
 @Injectable()
 export class RefreshTokenService {
@@ -47,5 +48,18 @@ export class RefreshTokenService {
     if (expire.endsWith('m')) return time * 60;
     if (expire.endsWith('s')) return time;
     return time;
+  }
+
+  async validateRefreshToken(
+    token: string,
+  ): Promise<RefreshTokenDocument | null> {
+    const refreshToken = await this.refreshTokenModel.findOne({
+      token,
+      revoked: false,
+    });
+    if (!refreshToken || new Date() > refreshToken.expireAt) {
+      return null; //The token has expired or been revoked.
+    }
+    return refreshToken;
   }
 }
