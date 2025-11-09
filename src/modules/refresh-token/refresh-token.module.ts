@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RefreshTokenService } from './refresh-token.service';
-import { RefreshTokenController } from './refresh-token/refresh-token.controller';
+import { RefreshTokenController } from './refresh-token.controller';
 
 @Module({
   providers: [RefreshTokenService],
-  controllers: [RefreshTokenController]
+  controllers: [RefreshTokenController],
 })
 export class RefreshTokenModule {}
