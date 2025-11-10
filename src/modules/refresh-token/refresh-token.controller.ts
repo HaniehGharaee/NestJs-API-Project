@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { RefreshTokenService } from './refresh-token.service';
 import { Request, Response } from 'express';
+import { error } from 'console';
 
 @Controller('refresh-token')
 export class RefreshTokenController {
@@ -8,7 +9,7 @@ export class RefreshTokenController {
 
   //Create Refresh Token
   @Post('create')
-  async creat(@Req() req: Request, @Res() res: Response) {
+  async create(@Req() req: Request, @Res() res: Response) {
     //@Req: When you want to access low-level HTTP information like IP, header, cookie, etc., the entire HTTP request (body, headers, cookies, ip, params...), example: req.ip, req.headers['user-agent'], req.cookies
     //Should we use @Res()? yes, Need to control cookies, headers, and remove refresh tokens
     const userId = req.body.userId; //Specifies which user this token belongs to.
@@ -17,7 +18,7 @@ export class RefreshTokenController {
 
     //Because you are using @Res() and the Exception Filter is no longer applied.
     try {
-      const refreshToken = await this.refreshTokenService.creatRefreshToken(
+      const refreshToken = await this.refreshTokenService.createRefreshToken(
         userId,
         userAgent,
         ipAddress,
@@ -48,6 +49,27 @@ export class RefreshTokenController {
       return res.json({ success: true, refreshToken });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  //Refresh Token Rotation
+  async rotate(
+    @Body() body: { oldToken: string },
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const userAgent = req.headers['user-agent'];
+    const ipAddress = req.ip;
+
+    try {
+      const newRefreshToken = await this.refreshTokenService.rotateRefreshToken(
+        body.oldToken,
+        userAgent,
+        ipAddress,
+      );
+      return res.json({ success: true, refreshToken: newRefreshToken });
+    } catch (error) {
+      return res.status(400).json({ success: false, message: error.message });
     }
   }
 }
