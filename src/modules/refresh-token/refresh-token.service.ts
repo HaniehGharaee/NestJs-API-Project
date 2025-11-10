@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { RefreshTokenDocument } from './schema/refresh-token.schema';
 import { promises } from 'dns';
+import { error } from 'console';
 
 @Injectable()
 export class RefreshTokenService {
@@ -12,7 +13,7 @@ export class RefreshTokenService {
     private refreshTokenModel: Model<RefreshTokenDocument>,
   ) {}
 
-  async creatRefreshToken(
+  async createRefreshToken(
     userId: string,
     userAgent?: string,
     ipAddress?: string,
@@ -61,5 +62,24 @@ export class RefreshTokenService {
       return null; //The token has expired or been revoked.
     }
     return refreshToken;
+  }
+
+  //To rotate an old Refresh Token with a new token. The system always remains in a safe and optimal state.
+  async rotateRefreshToken(
+    oldToken: string,
+    userAgent: string,
+    ipAddress: string,
+  ) {
+    const oldRefreshToken = await this.validateRefreshToken(oldToken);
+    if (!oldRefreshToken) {
+      throw new error('Invalid or expired refresh token');
+    }
+    //If a new token is created, the old token must be revoked.
+
+    return this.createRefreshToken(
+      oldRefreshToken.user.toString(),
+      userAgent,
+      ipAddress,
+    );
   }
 }
