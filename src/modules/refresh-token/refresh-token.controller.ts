@@ -53,6 +53,7 @@ export class RefreshTokenController {
   }
 
   //Refresh Token Rotation
+  @Post('rotate')
   async rotate(
     @Body() body: { oldToken: string },
     @Req() req: Request,
