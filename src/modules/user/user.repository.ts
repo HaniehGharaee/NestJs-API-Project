@@ -22,9 +22,13 @@ export class UserRepository {
     const user = new this.userModel(createUserDto);
     return await user.save();
   }
-  
+
   async findAll(): Promise<User[]> {
     return this.userModel.find().lean();
     //The difference between .find() and .find().lean() is an important performance tip in Mongoose.
+  }
+
+  async findByUsername(username: string): Promise<User | null> {
+    return this.userModel.findOne({ username }).exec();
   }
 }
