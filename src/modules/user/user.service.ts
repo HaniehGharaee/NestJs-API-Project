@@ -37,4 +37,8 @@ export class UserService {
       throw new InternalServerErrorException('Failed to fetch users');
     }
   }
+
+  async findByUsername(username: string) {
+    return this.userRepository.findByUsername(username)
+  }
 }
