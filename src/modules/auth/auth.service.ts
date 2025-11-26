@@ -1,16 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
-
+import { JwtService } from '@nestjs/jwt';
+import { RefreshTokenService } from './../refresh-token/refresh-token.service';
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly refreshTokenService: RefreshTokenService,
+  ) {}
 
   async validateUser(username: string, password: string) {
     const user = await this.userService.findByUsername(username);
-    if (!user) return null;
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return null;
+    // Password to compare against (Real password OR Dummy)
+    // Dummy hash: prevents timing attack & user enumeration
+    const dummyPasswordHash =
+      '$2b$10$CQo2jCAWiODR4/1yJfxzoOAmq2VTl8UeV6wH4WM/F7kuDKUNrS/QK';
+    // bcrypt hash for: "dummyPassword123"
+    const hashedPassword = user ? user.password : dummyPasswordHash;
+    // Step 3: Always compare passwords (user found or not)
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    if (!isMatch || !user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
     return user;
+  }
+  //✔ Service → Responsible for validation
+  //✔ Controller → Only takes input and gives output
+  //❗ Using NestJS Exception filters
+  async login(user, userAgent?: string, ipAddress?: string) {
+    // 1. build JWT payload
+    const payload = { sub: user._id.toString(), role: user.role };
+    // 2. sign an access token (short-lived JWT)
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET, //must be: =>+++this.config.get('J')
+      expiresIn: process.env.JWT_EXPIRES,
+    });
+    const refreshToken = await this.refreshTokenService.createRefreshToken(
+      user._id.toString(),
+      userAgent,
+      ipAddress,
+    );
+    return { accessToken, refreshToken };
   }
 }

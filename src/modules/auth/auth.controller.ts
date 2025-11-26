@@ -18,6 +18,12 @@ export class AuthController {
       return res
         .status(401)
         .json({ success: false, message: 'Invalid credentials' });
-    
+    const tokens = await this.authService.login(user, userAgent, ipAddress);
+    console.log('tokenstokenstokenstokens', tokens);
+    res.cookie('refreshToken', tokens.refreshToken);
+    return res.json({ success: true, accessToken: tokens.accessToken });
   }
 }
+//✔ Service → Returns data
+//✔ Controller → Decides whether this data is valid or not
+//This method is non-standard in NestJS.
