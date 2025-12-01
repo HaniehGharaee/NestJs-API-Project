@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-//import configuration from './config/configuration';
+import configuration from './config/configuration';
 //import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './database/database.module';
@@ -13,7 +13,7 @@ import { CategoryModule } from './modules/medicine/category/category.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      //load: [configuration],
+      load: [configuration],
       isGlobal: true,
       envFilePath: './env',
     }),
