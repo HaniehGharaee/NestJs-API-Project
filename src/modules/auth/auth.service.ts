@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { RefreshTokenService } from './../refresh-token/refresh-token.service';
 @Injectable()
 export class AuthService {
@@ -9,6 +10,7 @@ export class AuthService {
     private userService: UserService,
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(username: string, password: string) {
@@ -34,8 +36,8 @@ export class AuthService {
     const payload = { sub: user._id.toString(), role: user.role };
     // 2. sign an access token (short-lived JWT)
     const accessToken = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET, //must be: =>+++this.config.get('J')
-      expiresIn: process.env.JWT_EXPIRES,
+      secret: this.configService.get('JWT_SECRET'), //must be: =>+++this.config.get('J')
+      expiresIn: this.configService.get('JWT_EXPIRES'),
     });
     const refreshToken = await this.refreshTokenService.createRefreshToken(
       user._id.toString(),

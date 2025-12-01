@@ -1,8 +1,6 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
-import { User } from '../user/schema/user.schema';
-import { use } from 'passport';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +16,7 @@ export class AuthController {
       return res
         .status(401)
         .json({ success: false, message: 'Invalid credentials' });
-    const tokens = await this.authService.login(user, userAgent, ipAddress);
+    const tokens = await this.authService.login(user, userAgent as string, ipAddress);
     console.log('tokenstokenstokenstokens', tokens);
     res.cookie('refreshToken', tokens.refreshToken);
     return res.json({ success: true, accessToken: tokens.accessToken });
