@@ -1,4 +1,3 @@
-import { RefreshToken } from "src/modules/refresh-token/schema/refresh-token.schema";
 
 export default () => ({
   port: parseInt(process.env.PORT!, 10) || 3000,

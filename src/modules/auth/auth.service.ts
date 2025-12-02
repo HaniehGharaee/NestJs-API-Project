@@ -36,7 +36,7 @@ export class AuthService {
     const payload = { sub: user._id.toString(), role: user.role };
     // 2. sign an access token (short-lived JWT)
     const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_SECRET'), //must be: =>+++this.config.get('J')
+      secret: this.configService.get('JWT_SECRET'),
       expiresIn: this.configService.get('JWT_EXPIRES'),
     });
     const refreshToken = await this.refreshTokenService.createRefreshToken(
