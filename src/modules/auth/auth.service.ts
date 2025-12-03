@@ -46,4 +46,23 @@ export class AuthService {
     );
     return { accessToken, refreshToken };
   }
+
+  async refreshToken(oldRefreshToken: string, userAgent: string, ipAddress:string) {
+    //First, we need to validate the previous token to see if it is valid.
+    const tokenDoc = await this.refreshTokenService.validateRefreshToken(oldRefreshToken);
+    if(!tokenDoc) throw new UnauthorizedException('Invalid refresh token');
+    //rotate
+
+    //find user
+
+     // 1. build JWT payload
+    const payload = { sub: user._id.toString(), role: user.role };
+    // 2. sign an access token (short-lived JWT)
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: this.configService.get('JWT_EXPIRES'),
+    });
+
+    return {accessToken, refreshToken}
+  }
 }

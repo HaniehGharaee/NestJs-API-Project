@@ -13,6 +13,7 @@ export class RefreshTokenService {
     private refreshTokenModel: Model<RefreshTokenDocument>,
   ) {}
 
+  //createRefreshToken used just when login
   async createRefreshToken(
     userId: string,
     userAgent?: string,
