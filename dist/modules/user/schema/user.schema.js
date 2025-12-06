@@ -13,6 +13,7 @@ exports.UserSchema = exports.User = exports.UserRole = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
+const bcrypt = require("bcrypt");
 var UserRole;
 (function (UserRole) {
     UserRole["SUPER_ADMIN"] = "superAdmin";
@@ -79,6 +80,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], User.prototype, "address", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Types.ObjectId, ref: 'RefreshToken' }] }),
+    __metadata("design:type", Array)
+], User.prototype, "refreshToken", void 0);
 exports.User = User = __decorate([
     (0, mongoose_1.Schema)({
         timestamps: true,
@@ -98,5 +103,12 @@ exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
 exports.UserSchema.plugin(mongoosePaginate);
 exports.UserSchema.virtual('fullName').get(function () {
     return `${this.firstName || ''} ${this.lastName || ''} `.trim();
+});
+exports.UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password'))
+        return next();
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
 });
 //# sourceMappingURL=user.schema.js.map

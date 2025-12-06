@@ -28,7 +28,7 @@ let UserService = UserService_1 = class UserService {
         }
         catch (error) {
             this.logger.error('Database error while creating user', error);
-            throw new common_1.InternalServerErrorException('Failed to create creating user');
+            throw new common_1.InternalServerErrorException('Failed to create user');
         }
     }
     async getAllUsers() {
@@ -39,6 +39,12 @@ let UserService = UserService_1 = class UserService {
             this.logger.error('Database error while fetching users', error);
             throw new common_1.InternalServerErrorException('Failed to fetch users');
         }
+    }
+    async findByUsername(username) {
+        return this.userRepository.findByUsername(username);
+    }
+    async findById(id) {
+        return this.userRepository.findById(id);
     }
 };
 exports.UserService = UserService;

@@ -8,4 +8,6 @@ export declare class UserRepository {
     findByPhone(phone: string): Promise<User | null>;
     create(createUserDto: CreateUserDto): Promise<User>;
     findAll(): Promise<User[]>;
+    findByUsername(username: string): Promise<User | null>;
+    findById(id: string): Promise<User | null>;
 }
