@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -47,22 +47,37 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refreshToken(oldRefreshToken: string, userAgent: string, ipAddress:string) {
+  async refreshToken(
+    oldRefreshToken: string,
+    userAgent: string,
+    ipAddress: string,
+  ) {
     //First, we need to validate the previous token to see if it is valid.
-    const tokenDoc = await this.refreshTokenService.validateRefreshToken(oldRefreshToken);
-    if(!tokenDoc) throw new UnauthorizedException('Invalid refresh token');
-    //rotate
+    const tokenDoc =
+    //*****old token exist in DB, Check if it is not revoked (revoked === false), Check if it is not expired
+      await this.refreshTokenService.validateRefreshToken(oldRefreshToken);
+      console.log("tokenDoctokenDoctokenDoctokenDoctokenDoc", tokenDoc)
+    if (!tokenDoc) throw new UnauthorizedException('Invalid refresh token');
+    //rotate : Create a new Refresh Token
+    //Invalidate the old token
+    //Replace the new token
+    const newRefresh = await this.refreshTokenService.rotateRefreshToken(
+      oldRefreshToken,
+      userAgent,
+      ipAddress,
+    );
+    //*****Check which user it belongs to
+    const user = this.userService.findById(tokenDoc.user.toString())
+    if(!user) throw new BadRequestException('user not found')
 
-    //find user
-
-     // 1. build JWT payload
-    const payload = { sub: user._id.toString(), role: user.role };
+    // 1. build JWT payload
+    const payload = { sub: user.toString(), role: user };
     // 2. sign an access token (short-lived JWT)
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
       expiresIn: this.configService.get('JWT_EXPIRES'),
     });
 
-    return {accessToken, refreshToken}
+    return { accessToken, refreshToken:newRefresh };//?.token
   }
 }

@@ -32,6 +32,12 @@ let UserRepository = UserRepository_1 = class UserRepository {
     async findAll() {
         return this.userModel.find().lean();
     }
+    async findByUsername(username) {
+        return this.userModel.findOne({ username }).exec();
+    }
+    async findById(id) {
+        return this.userModel.findById(id).exec();
+    }
 };
 exports.UserRepository = UserRepository;
 exports.UserRepository = UserRepository = UserRepository_1 = __decorate([
