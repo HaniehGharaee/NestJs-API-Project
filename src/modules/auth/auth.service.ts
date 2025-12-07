@@ -80,4 +80,9 @@ export class AuthService {
 
     return { accessToken, refreshToken:newRefresh };//?.token
   }
+
+  async logout (refreshToken: string){
+    return this.refreshTokenService.revokeRefreshToken(refreshToken)
+  }
+  
 }

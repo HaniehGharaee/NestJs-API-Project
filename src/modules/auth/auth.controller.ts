@@ -56,6 +56,12 @@ export class AuthController {
     });
     return res.json({ success: true, accessToken: tokens.accessToken });
   }
+
+  //logout -> revoke refresh token
+  async logout (@Req() req: Request, @Res() res:Response){
+    const revoked = this.
+  }
+
 }
 //✔ Service → Returns data
 //✔ Controller → Decides whether this data is valid or not
