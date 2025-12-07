@@ -83,4 +83,10 @@ export class RefreshTokenService {
       ipAddress,
     );
   }
+
+  async revokeRefreshToken(token: string) {
+    return this.refreshTokenModel
+      .findOneAndUpdate({ token }, { revoked: true }, { new: true })
+      .exec();
+  }
 }
