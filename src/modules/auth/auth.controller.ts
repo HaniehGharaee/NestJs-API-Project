@@ -58,9 +58,9 @@ export class AuthController {
   }
 
   //logout -> revoke refresh token
-  async logout (@Req() req: Request, @Res() res:Response){
-    const revoked = this.
-  }
+  // async logout (@Req() req: Request, @Res() res:Response){
+  //   const revoked = this.
+  // }
 
 }
 //✔ Service → Returns data
